@@ -4,8 +4,8 @@ use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 
 // Users will be redirected to this route if not logged in
-Volt::route('/login', 'login')->name('login');
-Volt::route('/register', 'register')->name('register');
+Volt::route('/login', 'auth.login')->name('login');
+Volt::route('/register', 'auth.register')->name('register');
 
 // Define the logout
 Route::get('/logout', function () {

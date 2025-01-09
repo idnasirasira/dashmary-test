@@ -41,7 +41,16 @@ new class extends Component {
 <div>
     <div class="mx-auto mt-20 md:w-96">
 
-        <h1 class="text-3xl text-slate-700">Login</h1>
+        <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+            <div class="flex items-center gap-2 justify-center">
+                <x-icon name="o-square-3-stack-3d" class="w-6 -mb-1 text-purple-500" />
+                <span
+                    class="font-bold text-3xl me-3 bg-gradient-to-r from-purple-500 to-pink-300 bg-clip-text text-transparent ">
+                    {{ env('APP_NAME') }}
+                </span>
+            </div>
+            <h2 class="mt-5 text-center text-2xl/9 font-bold tracking-tight">Sign in to your account</h2>
+        </div>
 
         <x-form wire:submit="login" class="mt-5">
             <x-input label="E-mail" wire:model="email" icon="o-envelope" inline />

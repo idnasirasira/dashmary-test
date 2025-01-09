@@ -77,11 +77,12 @@
             {{-- MENU --}}
             <x-menu activate-by-route>
                 <br>
-                <x-menu-item title="Home" icon="o-sparkles" link="/" />
-                <x-menu-item title="Users" icon="o-users" link="/users" />
-                <x-menu-sub title="Settings" icon="o-cog-6-tooth">
-                    <x-menu-item title="Wifi" icon="o-wifi" link="####" />
-                    <x-menu-item title="Archives" icon="o-archive-box" link="####" />
+                <x-menu-item title="{{ __('Home') }}" icon="o-sparkles" link="/" />
+                <x-menu-item title="{{ __('Users') }}" icon="o-users" link="/users" />
+                <x-menu-item title="{{ __('Posts') }}" icon="o-document" link="/posts" />
+                <x-menu-sub title="{{ __('Settings') }}" icon="o-cog-6-tooth">
+                    <x-menu-item title="{{ __('Web Information') }}" icon="o-wifi" link="####" />
+                    <x-menu-item title="{{ __('Privacy') }}" icon="o-key" link="####" />
                 </x-menu-sub>
             </x-menu>
         </x-slot>

@@ -49,7 +49,7 @@ new class extends Component {
                 <x-input wire:model="title" label="{{ __('Title') }}" />
 
                 <x-editor wire:model="content" label="{{ __('Content') }}" hint="{{ __('Write your content') }}"
-                    disk="local" folder="posts/content_img" />
+                    folder="posts/editor" />
             </div>
 
             <div class="col-span-2">

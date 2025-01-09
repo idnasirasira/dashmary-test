@@ -54,11 +54,12 @@ new class extends Component {
             <div class="col-span-3 grid gap-3">
                 <x-input wire:model="title" label="{{ __('Title') }}" />
 
-                <x-editor wire:model="content" label="{{ __('Content') }}" hint="Write your content" />
+                <x-editor wire:model="content" label="{{ __('Content') }}" hint="{{ __('Write your content') }}"
+                    folder="posts/editor" />
             </div>
 
             <div class="col-span-2">
-                {{-- <x-header title="Basic" subtitle="Blog Post" size="text-2xl" /> --}}
+
             </div>
         </div>
 

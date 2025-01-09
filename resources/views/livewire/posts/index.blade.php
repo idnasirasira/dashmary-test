@@ -151,7 +151,6 @@ new class extends Component {
     <!-- TABLE  -->
     <x-card>
         <x-table class="dark:text-white" :headers="$headers" :rows="$posts" :sort-by="$sortBy" with-pagination>
-
             @scope('actions', $post)
                 <div class="flex justify-end space-x-1">
                     @if (Auth::user()->id == $post['user_id'])
@@ -163,6 +162,10 @@ new class extends Component {
                     @endif
                 </div>
             @endscope
+
+            <x-slot:empty>
+                <x-icon name="o-cube" label="{{ __('No posts available.') }}" />
+            </x-slot:empty>
         </x-table>
     </x-card>
 

@@ -119,6 +119,10 @@ new class extends Component {
                 <x-button icon="o-trash" wire:click="delete({{ $user['id'] }})" wire:confirm="Are you sure?" spinner
                     class="btn-ghost btn-sm text-red-500" />
             @endscope
+
+            <x-slot:empty>
+                <x-icon name="o-cube" label="{{ __('No records found.') }}" />
+            </x-slot:empty>
         </x-table>
     </x-card>
 

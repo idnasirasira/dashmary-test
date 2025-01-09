@@ -18,6 +18,11 @@ new class extends Component {
 
     public string $search = '';
 
+    // Options list
+    public Collection $usersSearchable;
+    // Selected User ID
+    public int $user_id = 0;
+
     public bool $drawer = false;
 
     public array $sortBy = ['column' => 'title', 'direction' => 'asc'];
@@ -34,7 +39,7 @@ new class extends Component {
     // Mount
     public function mount(): void
     {
-        // Mounting
+        $this->searchFilterUser();
     }
 
     // Clear filters
@@ -63,6 +68,7 @@ new class extends Component {
     {
         $filters = [
             'search' => $this->search,
+            'user_id' => $this->user_id,
         ];
 
         return $this->postService->getPaginate(5, $filters, $this->sortBy);
@@ -73,6 +79,7 @@ new class extends Component {
         return [
             'posts' => $this->posts(),
             'headers' => $this->headers(),
+            'users' => User::select('name', 'id')->get(),
             'totalActiveFilter' => $this->totalActiveFilter,
         ];
     }
@@ -80,8 +87,6 @@ new class extends Component {
     // Reset Pagination when any component property changes
     public function updated($property): void
     {
-        // $this->postService = app(PostService::class);
-
         if (!is_array($property) && $property != '') {
             $this->resetPage();
             $this->totalActiveFilter = $this->totalActive();
@@ -96,7 +101,23 @@ new class extends Component {
             $counter++;
         }
 
+        if ($this->user_id) {
+            $counter++;
+        }
+
         return $counter;
+    }
+
+    function searchFilterUser(string $value = '')
+    {
+        $selectedOption = User::where('id', $this->user_id)->get();
+
+        $this->usersSearchable = User::query()
+            ->where('name', 'like', "%$value%")
+            ->take(5)
+            ->orderBy('name')
+            ->get()
+            ->merge($selectedOption);
     }
 }; ?>
 
@@ -130,6 +151,27 @@ new class extends Component {
         <div class="grid gap-5">
             <x-input placeholder="Search..." wire:model.live.debounce="search" icon="o-magnifying-glass"
                 @keydown.enter="$wire.drawer = false" />
+
+            <x-choices label="Filter User" wire:model.live="user_id" search-function="searchFilterUser" debounce="300ms"
+                min-chars="2" :options="$usersSearchable" placeholder="Search ..." single searchable>
+                {{-- Item slot --}}
+                @scope('item', $user)
+                    <x-list-item :item="$user" sub-value="bio">
+                        <x-slot:avatar>
+                            <x-icon name="o-user" class="bg-orange-100 p-2 w-8 h8 rounded-full" />
+                        </x-slot:avatar>
+                        <x-slot:actions>
+                            <x-badge :value="$user->email" />
+                        </x-slot:actions>
+                    </x-list-item>
+                @endscope
+
+                {{-- Selection slot --}}
+                @scope('selection', $user)
+                    {{ $user->name }} ({{ $user->email }})
+                @endscope
+            </x-choices>
+
         </div>
         <x-slot:actions>
             <x-button label="Reset" icon="o-x-mark" wire:click="clear" spinner />

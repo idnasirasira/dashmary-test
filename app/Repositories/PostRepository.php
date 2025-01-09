@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Post;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Builder;
 
 class PostRepository
@@ -26,6 +27,10 @@ class PostRepository
 
     public function createPost(array $data)
     {
+        if (!isset($data['user_id'])) {
+            $data['user_id'] = Auth::user()->id;
+        }
+
         return $this->post->create($data);
     }
 
@@ -56,6 +61,9 @@ class PostRepository
             ->with(['user'])
             ->when(isset($filters['search']), function (Builder $q) use ($filters) {
                 $q->where('title', 'like', '%' . $filters['search'] . '%');
+            })
+            ->when($filters['user_id'], function (Builder $q) use ($filters) {
+                $q->where('user_id', $filters['user_id']);
             })
             ->when($sortBy, function (Builder $q) use ($sortBy) {
                 $q->orderBy($sortBy['column'], $sortBy['direction']);

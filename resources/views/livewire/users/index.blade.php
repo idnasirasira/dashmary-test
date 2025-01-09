@@ -27,13 +27,20 @@ new class extends Component {
     {
         $this->reset();
         $this->resetPage();
-        $this->success('Filters cleared.', position: 'toast-bottom');
+        $this->success('Filters cleared.');
     }
 
     // Delete action
     public function delete($id): void
     {
-        $this->warning("Will delete #$id", 'It is fake.', position: 'toast-top');
+        if ($id == auth()->id()) {
+            $this->error('Oops!', description: 'You cannot delete yourself.');
+            return;
+        }
+
+        User::destroy($id);
+
+        $this->success('User deleted.');
     }
 
     // Table headers

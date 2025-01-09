@@ -22,6 +22,7 @@ new class extends Component {
 
         $this->postChartByUser = $this->getPostChartByUser();
         $this->totalPost = $this->totalPost();
+        // dd('a');
     }
 
     private function formatChartData($data): array
@@ -82,8 +83,8 @@ new class extends Component {
 
     public function refreshPostChartByUser(): void
     {
-        Cache::forget('user_chart_by_destination');
-        $this->userChartByDestination = $this->getDataUserByDestination();
+        Cache::forget('post_chart_by_user');
+        $this->postChartByUser = $this->getPostChartByUser();
     }
 
     public function totalPost(): int

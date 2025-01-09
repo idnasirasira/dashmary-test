@@ -20,8 +20,9 @@ new class extends Component {
 
     // Options list
     public Collection $usersSearchable;
+
     // Selected User ID
-    public int $user_id = 0;
+    public ?int $user_id = 0;
 
     public bool $drawer = false;
 
@@ -47,6 +48,7 @@ new class extends Component {
     {
         $this->reset();
         $this->resetPage();
+        $this->searchFilterUser();
         $this->success('Filters cleared.');
     }
 
@@ -101,7 +103,7 @@ new class extends Component {
             $counter++;
         }
 
-        if ($this->user_id) {
+        if (isset($this->user_id)) {
             $counter++;
         }
 

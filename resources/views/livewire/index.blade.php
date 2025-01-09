@@ -5,7 +5,7 @@ use Livewire\Volt\Component;
 use Illuminate\Support\Facades\Cache;
 
 new class extends Component {
-    public int $chartQueryCacheExpired = 3600;
+    public int $chartQueryCacheExpired = 600;
 
     public array $userChartByDestination = [];
 
@@ -30,7 +30,7 @@ new class extends Component {
     public function getDataUserByDestination(string $chartType = 'pie'): array
     {
         return Cache::remember('user_chart_by_destination', $this->chartQueryCacheExpired, function () use ($chartType) {
-            $data = User::selectRaw('countries.name as label, COUNT(users.id) as data')->join('countries', 'users.country_id', '=', 'countries.id')->groupBy('countries.name')->get();
+            $data = User::query()->selectRaw('count(*) as data, countries.name as label')->join('countries', 'countries.id', '=', 'users.country_id')->groupBy('country_id')->get();
 
             if ($data->isEmpty()) {
                 $data = collect([['label' => 'No data', 'data' => 0]]);

@@ -89,7 +89,8 @@ new class extends Component {
 
     <!-- TABLE  -->
     <x-card>
-        <x-table :headers="$headers" :rows="$users" :sort-by="$sortBy" with-pagination link="users/{id}/edit">
+        <x-table class="dark:text-white" :headers="$headers" :rows="$users" :sort-by="$sortBy" with-pagination
+            link="users/{id}/edit">
             @scope('cell_avatar', $user)
                 <x-avatar image="{{ $user->avatar ?? '/empty-user.jpg' }}" class="!w-10" />
             @endscope

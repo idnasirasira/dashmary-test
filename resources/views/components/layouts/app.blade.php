@@ -14,6 +14,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css" />
     <script src="https://cdn.tiny.cloud/1/l55lnra8h83akv3oan66sno1bhh5josu7ipkvxqvthmgwmi7/tinymce/6/tinymce.min.js"
         referrerpolicy="origin"></script>
+    {{-- Chart --}}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
 
 <body class="min-h-screen bg-base-200/50 font-sans antialiased dark:bg-base-200">

@@ -38,13 +38,8 @@ class PostService
         return $this->postRepository->deletePost($id);
     }
 
-    public function getTableHeaders()
-    {
-        return $this->postRepository->tableHeaders;
-    }
-
     public function getPaginate($perPage = 10, $filters, $sortBy = [])
     {
-        return $this->postRepository->getPostsPaginated($perPage, $filters, $sortBy);
+        return $this->postRepository->getPaginatedPost($perPage, $filters, $sortBy);
     }
 }

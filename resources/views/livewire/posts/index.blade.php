@@ -41,6 +41,8 @@ new class extends Component {
     public function mount(): void
     {
         $this->searchFilterUser();
+        $this->user_id = Auth::user()->id;
+        $this->totalActiveFilter = $this->totalActive();
     }
 
     // Clear filters
@@ -73,7 +75,7 @@ new class extends Component {
             'user_id' => $this->user_id,
         ];
 
-        return $this->postService->getPaginate(5, $filters, $this->sortBy);
+        return $this->postService->getPaginate(10, $filters, $this->sortBy);
     }
 
     public function with(): array
@@ -121,6 +123,16 @@ new class extends Component {
             ->get()
             ->merge($selectedOption);
     }
+
+    function edit(Post $post)
+    {
+        if ($post->user_id != Auth::user()->id) {
+            $this->error('You are not allowed to edit this post.');
+            return;
+        }
+
+        return redirect()->route('posts.edit', $post);
+    }
 }; ?>
 
 <div>
@@ -138,12 +150,18 @@ new class extends Component {
 
     <!-- TABLE  -->
     <x-card>
-        <x-table class="dark:text-white" :headers="$headers" :rows="$posts" :sort-by="$sortBy" with-pagination
-            link="posts/{id}/edit">
+        <x-table class="dark:text-white" :headers="$headers" :rows="$posts" :sort-by="$sortBy" with-pagination>
 
             @scope('actions', $post)
-                <x-button icon="o-trash" wire:click="delete({{ $post['id'] }})" wire:confirm="Are you sure?" spinner
-                    class="btn-ghost btn-sm text-red-500" />
+                <div class="flex justify-end space-x-1">
+                    @if (Auth::user()->id == $post['user_id'])
+                        <x-button icon="o-pencil" wire:click="edit({{ $post['id'] }})" spinner
+                            class="btn-ghost btn-sm text-green-500" />
+
+                        <x-button icon="o-trash" wire:click="delete({{ $post['id'] }})" wire:confirm="Are you sure?"
+                            spinner class="btn-ghost btn-sm text-red-500" />
+                    @endif
+                </div>
             @endscope
         </x-table>
     </x-card>

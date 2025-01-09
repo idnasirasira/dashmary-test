@@ -49,7 +49,7 @@ class PostRepository
         return false;
     }
 
-    public function getPostsPaginated($perPage = 10, $filters = [], $sortBy = null)
+    public function getPaginatedPost($perPage = 10, $filters = [], $sortBy = null)
     {
         return $this->post
             ->withAggregate('user', 'name')

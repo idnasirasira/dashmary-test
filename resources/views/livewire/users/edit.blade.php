@@ -19,7 +19,7 @@ new class extends Component {
     #[Rule('required', 'email')]
     public string $email = '';
 
-    #[Role('sometimes')]
+    #[Rule('sometimes')]
     public ?int $country_id = null;
 
     #[Rule('nullable|image|max:1024')]

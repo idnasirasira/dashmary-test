@@ -20,6 +20,8 @@ new class extends Component {
 
     public array $sortBy = ['column' => 'name', 'direction' => 'asc'];
 
+    public int $totalActiveFilter = 0;
+
     // Clear filters
     public function clear(): void
     {
@@ -63,6 +65,7 @@ new class extends Component {
             'users' => $this->users(),
             'headers' => $this->headers(),
             'countries' => Country::all(),
+            'totalActiveFilter' => $this->totalActiveFilter,
         ];
     }
 
@@ -71,7 +74,23 @@ new class extends Component {
     {
         if (!is_array($property) && $property != '') {
             $this->resetPage();
+            $this->totalActiveFilter = $this->totalActive();
         }
+    }
+
+    public function totalActive(): int
+    {
+        $counter = 0;
+
+        if ($this->country_id) {
+            $counter++;
+        }
+
+        if ($this->search) {
+            $counter++;
+        }
+
+        return $counter;
     }
 }; ?>
 
@@ -82,7 +101,8 @@ new class extends Component {
             <x-input placeholder="Search..." wire:model.live.debounce="search" clearable icon="o-magnifying-glass" />
         </x-slot:middle>
         <x-slot:actions>
-            <x-button label="Filters" @click="$wire.drawer = true" responsive badge icon="o-funnel" />
+            <x-button label="Filters" @click="$wire.drawer = true" responsive badge="{{ $totalActiveFilter }}"
+                icon="o-funnel" />
             <x-button label="Create" link="/users/create" responsive icon="o-plus" class="btn-primary" />
         </x-slot:actions>
     </x-header>

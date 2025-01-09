@@ -8,6 +8,12 @@
     <title>{{ isset($title) ? $title . ' - ' . config('app.name') : config('app.name') }}</title>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    {{-- Cropper.js --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css" />
+    <script src="https://cdn.tiny.cloud/1/l55lnra8h83akv3oan66sno1bhh5josu7ipkvxqvthmgwmi7/tinymce/6/tinymce.min.js"
+        referrerpolicy="origin"></script>
 </head>
 
 <body class="min-h-screen font-sans antialiased bg-base-200/50 dark:bg-base-200">
@@ -67,6 +73,9 @@
 
     {{--  TOAST area --}}
     <x-toast />
+
+    {{-- Spotlight --}}
+    <x-spotlight />
 </body>
 
 </html>

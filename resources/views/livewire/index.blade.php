@@ -2,8 +2,11 @@
 
 use App\Models\User;
 use Livewire\Volt\Component;
+use Illuminate\Support\Facades\Cache;
 
 new class extends Component {
+    public int $chartQueryCacheExpired = 3600;
+
     public array $userChartByDestination = [];
 
     public function mount(): void
@@ -11,35 +14,33 @@ new class extends Component {
         $this->userChartByDestination = $this->getDataUserByDestination();
     }
 
-    public function getDataUserByDestination(): array
+    private function formatChartData($data): array
     {
-        $data = User::selectRaw('countries.name as country_name, COUNT(users.id) as total')
-            ->join('countries', 'users.country_id', '=', 'countries.id')
-            ->groupBy('countries.name')
-            ->get()
-            ->map(function ($user) {
-                return [
-                    'label' => $user->country_name,
-                    'data' => $user->total,
-                ];
-            });
-        // Default value if null response
-        if ($data->isEmpty()) {
-            $data = collect([['label' => 'No data', 'data' => 0]]);
-        }
-
         return [
-            'type' => 'pie',
-            'data' => [
-                'labels' => $data->pluck('label')->toArray(),
-                'datasets' => [
-                    [
-                        'label' => '# of Users',
-                        'data' => $data->pluck('data')->toArray(),
-                    ],
+            'labels' => $data->pluck('label')->toArray(),
+            'datasets' => [
+                [
+                    'label' => '# of Users',
+                    'data' => $data->pluck('data')->toArray(),
                 ],
             ],
         ];
+    }
+
+    public function getDataUserByDestination(string $chartType = 'pie'): array
+    {
+        return Cache::remember('user_chart_by_destination', $this->chartQueryCacheExpired, function () use ($chartType) {
+            $data = User::selectRaw('countries.name as label, COUNT(users.id) as data')->join('countries', 'users.country_id', '=', 'countries.id')->groupBy('countries.name')->get();
+
+            if ($data->isEmpty()) {
+                $data = collect([['label' => 'No data', 'data' => 0]]);
+            }
+
+            return [
+                'type' => $chartType,
+                'data' => $this->formatChartData($data),
+            ];
+        });
     }
 }; ?>
 
